@@ -1,0 +1,527 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Seedance Prompt Guide - How to Write Perfect AI Video Prompts">
+  <div class="guide-page">
+    <div class="container">
+      <header class="guide-header">
+        <h1>Seedance Prompt <span class="gradient-text">Writing Guide</span></h1>
+        <p>Master the art of creating cinematic AI videos with perfectly structured prompts</p>
+      </header>
+
+      <nav class="toc">
+        <h3>📑 Table of Contents</h3>
+        <ol>
+          <li><a href="#basics">Basic Structure</a></li>
+          <li><a href="#camera">Camera Movements</a></li>
+          <li><a href="#style">Style & Lighting</a></li>
+          <li><a href="#advanced">Advanced Techniques</a></li>
+          <li><a href="#tips">Pro Tips</a></li>
+        </ol>
+      </nav>
+
+      <article class="guide-content">
+        <!-- Basic Structure -->
+        <section id="basics" class="guide-section">
+          <h2>1. Basic Prompt Structure</h2>
+          <p>Every effective Seedance prompt follows this formula:</p>
+          
+          <div class="formula-box">
+            <code>Subject + Action + Camera + Scene + Style</code>
+          </div>
+
+          <div class="example-grid">
+            <div class="example-card">
+              <h4>❌ Bad Prompt</h4>
+              <code>A woman walking in the city</code>
+              <p>Too vague. No camera info, no style, no emotion.</p>
+            </div>
+            <div class="example-card good">
+              <h4>✅ Good Prompt</h4>
+              <code>A young woman in a red dress walks confidently down a rain-soaked Tokyo street at night. Neon signs reflect in puddles. Camera tracks alongside her with slight handheld movement. Cinematic color grading, moody atmosphere, 35mm film look.</code>
+              <p>Specific subject, clear action, camera movement, atmosphere, and style.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Camera Movements -->
+        <section id="camera" class="guide-section">
+          <h2>2. Camera Movements</h2>
+          <p>Seedance excels at understanding camera language. Here are the movements you can use:</p>
+
+          <div class="camera-grid">
+            <div class="camera-item">
+              <span class="camera-icon">🎬</span>
+              <h4>Push In / Dolly In</h4>
+              <p>Camera moves toward subject. Creates intimacy.</p>
+              <code>"Camera slowly pushes in from medium shot to close-up"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">🔄</span>
+              <h4>Orbit / Arc</h4>
+              <p>Camera circles around subject. Great for reveals.</p>
+              <code>"Camera orbits 180 degrees around the product"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">📷</span>
+              <h4>Pan</h4>
+              <p>Camera rotates horizontally on axis.</p>
+              <code>"Slow pan from left to right across the landscape"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">⬆️</span>
+              <h4>Tilt</h4>
+              <p>Camera rotates vertically. Good for scale.</p>
+              <code>"Camera tilts up from feet to face"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">🚁</span>
+              <h4>Aerial / Drone</h4>
+              <p>High angle moving shot. Epic views.</p>
+              <code>"Aerial drone shot rises over mountain peaks"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">🏃</span>
+              <h4>Tracking / Follow</h4>
+              <p>Camera follows subject movement.</p>
+              <code>"Camera tracks alongside running athlete"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">🤳</span>
+              <h4>Handheld</h4>
+              <p>Slight shake for documentary feel.</p>
+              <code>"Handheld camera with subtle movement"</code>
+            </div>
+            <div class="camera-item">
+              <span class="camera-icon">🎥</span>
+              <h4>Lens Switch</h4>
+              <p>Cut between different shots. Seedance specialty!</p>
+              <code>"Wide shot... lens switch to close-up of eyes"</code>
+            </div>
+          </div>
+        </section>
+
+        <!-- Style & Lighting -->
+        <section id="style" class="guide-section">
+          <h2>3. Style & Lighting</h2>
+          
+          <h3>Lighting Keywords</h3>
+          <div class="keyword-list">
+            <span class="keyword">golden hour</span>
+            <span class="keyword">blue hour</span>
+            <span class="keyword">high-key</span>
+            <span class="keyword">low-key</span>
+            <span class="keyword">rim lighting</span>
+            <span class="keyword">backlit</span>
+            <span class="keyword">volumetric</span>
+            <span class="keyword">three-point lighting</span>
+            <span class="keyword">neon</span>
+            <span class="keyword">candlelight</span>
+            <span class="keyword">moonlight</span>
+            <span class="keyword">studio lighting</span>
+          </div>
+
+          <h3>Style References</h3>
+          <div class="keyword-list">
+            <span class="keyword">cinematic</span>
+            <span class="keyword">documentary</span>
+            <span class="keyword">commercial</span>
+            <span class="keyword">film noir</span>
+            <span class="keyword">anime style</span>
+            <span class="keyword">Studio Ghibli</span>
+            <span class="keyword">Blade Runner aesthetic</span>
+            <span class="keyword">Wes Anderson style</span>
+            <span class="keyword">35mm film</span>
+            <span class="keyword">IMAX</span>
+            <span class="keyword">VHS aesthetic</span>
+            <span class="keyword">4K HDR</span>
+          </div>
+        </section>
+
+        <!-- Advanced Techniques -->
+        <section id="advanced" class="guide-section">
+          <h2>4. Advanced Techniques</h2>
+
+          <h3>Multi-Shot Sequences</h3>
+          <p>Use "lens switch" to create cuts within a single generation:</p>
+          <div class="code-block">
+Wide establishing shot of a futuristic laboratory with scientists working.
+<strong>Lens switch</strong> to close-up of a holographic display showing DNA strands rotating.
+<strong>Lens switch</strong> to medium shot of lead scientist nodding with satisfaction.
+          </div>
+
+          <h3>Image-to-Video (I2V)</h3>
+          <p>When using a reference image, focus on describing <em>motion</em> not static elements:</p>
+          <div class="example-grid">
+            <div class="example-card">
+              <h4>❌ Bad I2V Prompt</h4>
+              <code>A beautiful woman with blue eyes and blonde hair wearing a white dress</code>
+              <p>Describes what's already in the image.</p>
+            </div>
+            <div class="example-card good">
+              <h4>✅ Good I2V Prompt</h4>
+              <code>She slowly turns her head toward the camera and smiles gently. A light breeze moves her hair. Camera pushes in slightly.</code>
+              <p>Focuses on motion and changes.</p>
+            </div>
+          </div>
+
+          <h3>Degree Adverbs</h3>
+          <p>Seedance responds to intensity modifiers:</p>
+          <div class="keyword-list">
+            <span class="keyword">slowly</span>
+            <span class="keyword">quickly</span>
+            <span class="keyword">dramatically</span>
+            <span class="keyword">gently</span>
+            <span class="keyword">vigorously</span>
+            <span class="keyword">frantically</span>
+            <span class="keyword">smoothly</span>
+            <span class="keyword">abruptly</span>
+          </div>
+        </section>
+
+        <!-- Pro Tips -->
+        <section id="tips" class="guide-section">
+          <h2>5. Pro Tips</h2>
+
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="tip-number">01</span>
+              <h4>Be Specific with Physics</h4>
+              <p>Don't say "car turns." Say "The tires smoke as the car drifts 90 degrees." Seedance calculates physics based on your description.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-number">02</span>
+              <h4>Use Fixed vs Unfixed Camera</h4>
+              <p>Enable "Fixed Camera" in settings for static shots. Disable it when you want camera movement. This overrides prompt instructions.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-number">03</span>
+              <h4>Test at 5 Seconds First</h4>
+              <p>Before generating a 15-second video, test your prompt at 5 seconds to save credits and iterate faster.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-number">04</span>
+              <h4>Avoid Contradictions</h4>
+              <p>If your reference image shows a man, don't write "a woman dancing." Match your prompt to the input.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-number">05</span>
+              <h4>One Clear Action Per Shot</h4>
+              <p>Complex prompts work better when each shot has one primary action. Use lens switches for variety.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-number">06</span>
+              <h4>Include Sound Cues (2.0)</h4>
+              <p>Seedance 2.0 generates audio. Include sound descriptions: "metallic clink," "echoing footsteps," "crackling fire."</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA -->
+        <div class="guide-cta">
+          <h2>Ready to Create?</h2>
+          <p>Browse our library of tested prompts and start generating</p>
+          <a href="/#prompts" class="btn btn-primary btn-lg">
+            Browse Prompts
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .guide-page {
+    padding: 3rem 0 6rem;
+  }
+
+  .guide-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .guide-header h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .guide-header p {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .toc h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+  }
+
+  .toc ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc a {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .toc a:hover {
+    color: var(--accent-primary);
+  }
+
+  /* Guide Content */
+  .guide-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .guide-section {
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .guide-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .guide-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-primary);
+  }
+
+  .guide-section h3 {
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem;
+  }
+
+  .guide-section p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Formula Box */
+  .formula-box {
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent-primary);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .formula-box code {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    color: var(--accent-primary);
+  }
+
+  /* Example Grid */
+  .example-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .example-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+
+  .example-card.good {
+    border-color: var(--accent-primary);
+  }
+
+  .example-card h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .example-card code {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    background: var(--bg-primary);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .example-card p {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  /* Camera Grid */
+  .camera-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .camera-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+  }
+
+  .camera-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .camera-item h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .camera-item p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .camera-item code {
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+  }
+
+  /* Keywords */
+  .keyword-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 2rem;
+  }
+
+  .keyword {
+    padding: 0.4rem 0.75rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  /* Code Block */
+  .code-block {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    margin: 1rem 0 2rem;
+  }
+
+  .code-block strong {
+    color: var(--accent-primary);
+  }
+
+  /* Tips Grid */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .tip-number {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--bg-tertiary);
+  }
+
+  .tip-card h4 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+  }
+
+  .tip-card p {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  /* CTA */
+  .guide-cta {
+    text-align: center;
+    padding: 3rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    margin-top: 4rem;
+  }
+
+  .guide-cta h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .guide-cta p {
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+  }
+
+  .btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .guide-header h1 {
+      font-size: 2rem;
+    }
+
+    .example-grid,
+    .camera-grid,
+    .tips-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .toc ol {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

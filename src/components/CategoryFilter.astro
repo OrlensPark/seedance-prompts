@@ -1,0 +1,111 @@
+---
+import { categories } from '../data/prompts';
+---
+
+<div class="category-filter">
+  <button class="filter-btn active" data-category="all">
+    <span class="filter-icon">✨</span>
+    <span>All Prompts</span>
+  </button>
+  {categories.map(cat => (
+    <button class="filter-btn" data-category={cat.id} style={`--cat-color: ${cat.color}`}>
+      <span class="filter-icon">{cat.icon}</span>
+      <span>{cat.name}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
+  }
+
+  .filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-color-hover);
+    color: var(--text-primary);
+  }
+
+  .filter-btn.active {
+    background: var(--cat-color, var(--accent-primary));
+    border-color: var(--cat-color, var(--accent-primary));
+    color: var(--bg-primary);
+  }
+
+  .filter-btn.active[data-category="all"] {
+    background: var(--gradient-primary);
+    border-color: transparent;
+  }
+
+  .filter-icon {
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 768px) {
+    .category-filter {
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    .filter-btn span:last-child {
+      display: none;
+    }
+
+    .filter-icon {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const promptCards = document.querySelectorAll('.prompt-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update active state
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const category = btn.getAttribute('data-category');
+
+      // Filter cards
+      promptCards.forEach(card => {
+        const cardCategory = card.getAttribute('data-category');
+        if (category === 'all' || cardCategory === category) {
+          (card as HTMLElement).style.display = 'flex';
+          card.classList.add('animate-fade-in');
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

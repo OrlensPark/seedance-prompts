@@ -1,0 +1,288 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import CategoryFilter from '../components/CategoryFilter.astro';
+import PromptCard from '../components/PromptCard.astro';
+import { prompts, categories, getFeaturedPrompts } from '../data/prompts';
+
+const featuredPrompts = getFeaturedPrompts();
+---
+
+<Layout title="SeedancePrompts - The Ultimate AI Video Prompt Library">
+  <Hero />
+
+  <!-- Featured Section -->
+  <section id="featured" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>⭐ Featured Prompts</h2>
+        <p>Hand-picked prompts that deliver stunning results</p>
+      </div>
+      
+      <div class="prompts-grid stagger">
+        {featuredPrompts.map(prompt => (
+          <PromptCard prompt={prompt} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Overview -->
+  <section id="categories" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>📂 Browse by Category</h2>
+        <p>Find the perfect prompt for your project</p>
+      </div>
+
+      <div class="categories-grid">
+        {categories.map(cat => {
+          const count = prompts.filter(p => p.category === cat.id).length;
+          return (
+            <a href={`#prompts`} class="category-card" style={`--cat-color: ${cat.color}`} data-filter={cat.id}>
+              <span class="category-icon">{cat.icon}</span>
+              <div class="category-info">
+                <h3>{cat.name}</h3>
+                <p>{cat.nameZh}</p>
+              </div>
+              <span class="category-count">{count}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- All Prompts -->
+  <section id="prompts" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>🎬 All Prompts</h2>
+        <p>Browse our complete collection of Seedance prompts</p>
+      </div>
+
+      <CategoryFilter />
+
+      <div class="prompts-grid" style="margin-top: 2rem;">
+        {prompts.map(prompt => (
+          <PromptCard prompt={prompt} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="cta-content">
+          <h2>Ready to Create?</h2>
+          <p>Start generating cinematic AI videos with our tested prompts</p>
+          <div class="cta-actions">
+            <a href="https://jimeng.jianying.com" target="_blank" class="btn btn-primary btn-lg">
+              Open Dreamina
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                <polyline points="15,3 21,3 21,9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </a>
+            <a href="/guide" class="btn btn-secondary btn-lg">
+              Learn Prompt Writing
+            </a>
+          </div>
+        </div>
+        <div class="cta-visual">
+          <div class="visual-card">🎬</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .section {
+    padding: 5rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .prompts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Categories Grid */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    cursor: pointer;
+  }
+
+  .category-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--cat-color);
+    transform: translateY(-2px);
+  }
+
+  .category-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+    border-radius: var(--radius-md);
+  }
+
+  .category-info {
+    flex: 1;
+  }
+
+  .category-info h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+  }
+
+  .category-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .category-count {
+    padding: 0.25rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cat-color);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 5rem 0;
+  }
+
+  .cta-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 4rem;
+    background: var(--gradient-dark);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient-primary);
+  }
+
+  .cta-content {
+    max-width: 500px;
+  }
+
+  .cta-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .cta-visual {
+    position: relative;
+  }
+
+  .visual-card {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @media (max-width: 900px) {
+    .prompts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cta-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .cta-visual {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Category card click to filter
+  document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const category = card.getAttribute('data-filter');
+      const filterBtn = document.querySelector(`.filter-btn[data-category="${category}"]`) as HTMLButtonElement;
+      if (filterBtn) {
+        filterBtn.click();
+      }
+    });
+  });
+</script>

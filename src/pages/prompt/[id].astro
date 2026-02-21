@@ -1,0 +1,472 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { prompts, categories, getPromptById } from '../../data/prompts';
+
+export function getStaticPaths() {
+  return prompts.map(prompt => ({
+    params: { id: prompt.id },
+    props: { prompt },
+  }));
+}
+
+const { prompt } = Astro.props;
+const category = categories.find(c => c.id === prompt.category);
+
+// Get related prompts
+const relatedPrompts = prompts
+  .filter(p => p.category === prompt.category && p.id !== prompt.id)
+  .slice(0, 3);
+---
+
+<Layout title={`${prompt.title} - SeedancePrompts`} description={prompt.prompt.slice(0, 160)}>
+  <div class="prompt-detail">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/#prompts">Prompts</a>
+        <span>/</span>
+        <span>{prompt.title}</span>
+      </nav>
+
+      <div class="detail-grid">
+        <!-- Main Content -->
+        <main class="main-content">
+          <div class="prompt-header">
+            <div class="header-badges">
+              <span class="category-badge" style={`--cat-color: ${category?.color}`}>
+                <span>{category?.icon}</span>
+                <span>{category?.name}</span>
+              </span>
+              <span class="model-badge">{prompt.model}</span>
+              <span class={`difficulty-badge difficulty-${prompt.difficulty}`}>
+                {prompt.difficulty}
+              </span>
+            </div>
+
+            <h1>{prompt.title}</h1>
+            <p class="title-zh">{prompt.titleZh}</p>
+          </div>
+
+          <!-- Full Prompt -->
+          <section class="prompt-section">
+            <div class="section-header">
+              <h2>📝 Full Prompt</h2>
+              <button class="copy-btn btn btn-primary" data-prompt={prompt.prompt}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                </svg>
+                Copy Prompt
+              </button>
+            </div>
+            <div class="prompt-box">
+              <code>{prompt.prompt}</code>
+            </div>
+          </section>
+
+          <!-- Tags -->
+          <section class="tags-section">
+            <h3>🏷️ Tags</h3>
+            <div class="tags-list">
+              {prompt.tags.map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          </section>
+
+          <!-- Camera Movements -->
+          {prompt.camera && prompt.camera.length > 0 && (
+            <section class="camera-section">
+              <h3>🎥 Camera Movements</h3>
+              <div class="camera-list">
+                {prompt.camera.map(cam => (
+                  <span class="camera-tag">{cam}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <!-- Tips -->
+          <section class="tips-section">
+            <h3>💡 Usage Tips</h3>
+            <ul class="tips-list">
+              <li>Use this prompt with <strong>{prompt.model}</strong> for best results</li>
+              <li>Recommended duration: <strong>{prompt.duration || '5-10s'}</strong></li>
+              <li>Type: <strong>{prompt.type === 'text-to-video' ? 'Text-to-Video' : 'Image-to-Video'}</strong></li>
+              {prompt.type === 'image-to-video' && (
+                <li>Upload a reference image that matches the subject description</li>
+              )}
+              <li>Adjust camera movements in basic parameters if needed</li>
+            </ul>
+          </section>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <!-- Quick Actions -->
+          <div class="sidebar-card">
+            <h3>Quick Actions</h3>
+            <div class="quick-actions">
+              <a href="https://jimeng.jianying.com" target="_blank" class="btn btn-primary full-width">
+                Open in Dreamina
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                  <polyline points="15,3 21,3 21,9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+              </a>
+              <button class="btn btn-secondary full-width copy-btn" data-prompt={prompt.prompt}>
+                Copy Prompt
+              </button>
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="sidebar-card">
+            <h3>Details</h3>
+            <dl class="details-list">
+              <div class="detail-item">
+                <dt>Category</dt>
+                <dd style={`color: ${category?.color}`}>{category?.name}</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Model</dt>
+                <dd>{prompt.model}</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Type</dt>
+                <dd>{prompt.type === 'text-to-video' ? 'Text-to-Video' : 'Image-to-Video'}</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Duration</dt>
+                <dd>{prompt.duration || '5-10s'}</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Difficulty</dt>
+                <dd class={`difficulty-${prompt.difficulty}`}>{prompt.difficulty}</dd>
+              </div>
+              <div class="detail-item">
+                <dt>Added</dt>
+                <dd>{prompt.createdAt}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Related Prompts -->
+          {relatedPrompts.length > 0 && (
+            <div class="sidebar-card">
+              <h3>Related Prompts</h3>
+              <div class="related-list">
+                {relatedPrompts.map(related => (
+                  <a href={`/prompt/${related.id}`} class="related-item">
+                    <span class="related-icon">{category?.icon}</span>
+                    <div class="related-info">
+                      <span class="related-title">{related.title}</span>
+                      <span class="related-model">{related.model}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .prompt-detail {
+    padding: 2rem 0 5rem;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent-primary);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Main Content */
+  .main-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+  }
+
+  .prompt-header {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .header-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background: color-mix(in srgb, var(--cat-color) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cat-color) 30%, transparent);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--cat-color);
+  }
+
+  .model-badge {
+    padding: 0.4rem 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+  }
+
+  .difficulty-badge {
+    padding: 0.4rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .difficulty-beginner { background: rgba(39, 174, 96, 0.15); color: #27AE60; }
+  .difficulty-intermediate { background: rgba(255, 184, 0, 0.15); color: #FFB800; }
+  .difficulty-advanced { background: rgba(231, 76, 60, 0.15); color: #E74C3C; }
+
+  .prompt-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .title-zh {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  /* Prompt Section */
+  .prompt-section .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .prompt-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .prompt-box {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+
+  .prompt-box code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Tags & Camera */
+  .tags-section, .camera-section, .tips-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .tags-section h3, .camera-section h3, .tips-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .tags-list, .camera-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .camera-tag {
+    padding: 0.35rem 0.75rem;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--accent-tertiary);
+  }
+
+  .tips-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tips-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  .tips-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-primary);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 90px;
+  }
+
+  .sidebar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+
+  .sidebar-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-muted);
+  }
+
+  .quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .full-width {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+  }
+
+  .detail-item dt {
+    color: var(--text-muted);
+  }
+
+  .detail-item dd {
+    font-weight: 500;
+  }
+
+  .related-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .related-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .related-item:hover {
+    background: var(--bg-card-hover);
+  }
+
+  .related-icon {
+    font-size: 1.25rem;
+  }
+
+  .related-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .related-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .related-model {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 1000px) {
+    .detail-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      position: static;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const prompt = btn.getAttribute('data-prompt');
+      if (prompt) {
+        await navigator.clipboard.writeText(prompt);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20,6 9,17 4,12"/>
+          </svg>
+          Copied!
+        `;
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+        }, 2000);
+      }
+    });
+  });
+</script>
