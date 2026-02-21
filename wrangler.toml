@@ -1,10 +1,4 @@
-# Cloudflare Pages configuration
-[build]
-  name = "seedance-prompts"                  
-  compatibility_date = "2026-02-21"
-  pages_build_output_dir = "./dist"
+name = "seedance-prompts"                  # ← 替换成你的实际项目名！！！（仪表盘里看，精确匹配，包括大小写和连字符）
+compatibility_date = "2026-02-21"
 
-  command = "npm run build"
-  publish = "dist"
-[build.environment]
-  NODE_VERSION = "20"
+pages_build_output_dir = "./dist"           # ← 这个字段是必须的！Cloudflare Pages 专用，指向 Astro 的构建输出
