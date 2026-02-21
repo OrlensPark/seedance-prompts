@@ -1,7 +1,10 @@
 # Cloudflare Pages configuration
 [build]
+  name = "seedance-prompts"                  
+  compatibility_date = "2026-02-21"
+  pages_build_output_dir = "./dist"
+
   command = "npm run build"
   publish = "dist"
-
 [build.environment]
   NODE_VERSION = "20"
