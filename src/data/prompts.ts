@@ -349,6 +349,23 @@ export const prompts: Prompt[] = [
     createdAt: '2026-02-04',
   },
 
+  // === LIFESTYLE (continued) ===
+  {
+    id: 'lifestyle-003',
+    title: 'UK Job Search & Sponsorship Check',
+    titleZh: '英国求职与签证担保查询',
+    category: 'lifestyle',
+    prompt: `A young professional sits at a desk with a laptop open to the UK Home Office Skilled Worker visa sponsorship register website. She scrolls through the list of licensed sponsors, cross-referencing with job listings on another browser tab. Close-up on her notepad where she writes down company names and ticks boxes. A cup of tea steams beside her. Soft natural window light, organized desk, motivational sticky notes on monitor. Camera slowly pushes in from medium shot. Documentary lifestyle style, hopeful and determined mood, warm tones.`,
+    tags: ['uk jobs', 'visa sponsorship', 'job search', 'career', 'immigration', 'professional'],
+    difficulty: 'beginner',
+    model: 'seedance-1.0-pro',
+    type: 'text-to-video',
+    duration: '8-10s',
+    camera: ['push in', 'close-up', 'static'],
+    featured: false,
+    createdAt: '2026-03-18',
+  },
+
   // === UGC STYLE ===
   {
     id: 'ugc-001',
