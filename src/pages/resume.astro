@@ -1,0 +1,919 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="AI Resume Optimizer - Free ATS Score & Tips"
+  description="Optimize your resume with AI-powered analysis. Get your ATS score, keyword match rate, and actionable improvement suggestions instantly."
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badges">
+        <span class="badge">⚡ Instant Analysis</span>
+        <span class="badge">🎯 ATS Score</span>
+        <span class="badge">🔑 Keyword Match</span>
+        <span class="badge">💡 Smart Tips</span>
+      </div>
+      <h1>AI <span class="gradient-text">Resume Optimizer</span></h1>
+      <p class="hero-sub">Paste your resume, get an ATS compatibility score and actionable tips to land more interviews — 100% free, no sign-up needed.</p>
+    </div>
+  </section>
+
+  <!-- Main Tool -->
+  <section class="tool-section">
+    <div class="container">
+      <div class="tool-grid">
+
+        <!-- LEFT: Input -->
+        <div class="input-panel">
+          <div class="panel-header">
+            <div class="tab-bar">
+              <button class="tab active" id="tab-resume" onclick="switchTab('resume')">📄 Resume</button>
+              <button class="tab" id="tab-job" onclick="switchTab('job')">💼 Job Description <span class="optional">(optional)</span></button>
+            </div>
+          </div>
+
+          <div id="pane-resume" class="pane active">
+            <textarea
+              id="resume-input"
+              class="resume-textarea"
+              placeholder="Paste your resume text here...
+
+Example:
+John Doe
+john@example.com | (555) 123-4567 | LinkedIn: linkedin.com/in/johndoe
+New York, NY
+
+SUMMARY
+Results-driven software engineer with 5+ years of experience...
+
+EXPERIENCE
+Senior Software Engineer — Acme Corp (2021–Present)
+• Led development of microservices architecture, reducing latency by 40%
+• Managed a team of 6 engineers to deliver 3 major product launches
+
+EDUCATION
+B.S. Computer Science — MIT, 2019
+
+SKILLS
+Python, JavaScript, React, Node.js, AWS, Docker"
+            ></textarea>
+            <div class="input-hint">Tip: Plain text works best. Copy from Word/PDF and paste here.</div>
+          </div>
+
+          <div id="pane-job" class="pane">
+            <textarea
+              id="job-input"
+              class="resume-textarea"
+              placeholder="Paste the job description here to get keyword match analysis...
+
+The analyzer will identify which required skills and keywords appear in your resume vs which ones are missing."
+            ></textarea>
+            <div class="input-hint">Tip: Paste the full job posting for the best keyword match results.</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary btn-lg" id="analyze-btn" onclick="runAnalysis()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              Analyze Resume
+            </button>
+            <button class="btn btn-ghost" onclick="clearAll()">Clear</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Results -->
+        <div class="results-panel" id="results-panel">
+
+          <!-- Empty state -->
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>Ready to Analyze</h3>
+            <p>Paste your resume on the left and click <strong>Analyze Resume</strong> to get your ATS score and improvement tips.</p>
+            <ul class="feature-list">
+              <li>✅ ATS Compatibility Score</li>
+              <li>✅ Missing Keywords Detection</li>
+              <li>✅ Action Verb Analysis</li>
+              <li>✅ Quantified Achievement Check</li>
+              <li>✅ Section Completeness Review</li>
+            </ul>
+          </div>
+
+          <!-- Results (hidden until analysis) -->
+          <div class="results-content" id="results-content" style="display:none">
+
+            <!-- Score Circle -->
+            <div class="score-section">
+              <div class="score-circle-wrapper">
+                <svg class="score-svg" viewBox="0 0 120 120" width="140" height="140">
+                  <circle class="score-bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/>
+                  <circle class="score-fg" id="score-arc" cx="60" cy="60" r="52" fill="none" stroke-width="10"
+                    stroke-dasharray="327" stroke-dashoffset="327"
+                    stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                </svg>
+                <div class="score-label">
+                  <span class="score-number" id="score-number">0</span>
+                  <span class="score-max">/100</span>
+                  <span class="score-text" id="score-text">ATS Score</span>
+                </div>
+              </div>
+              <div class="score-grade" id="score-grade"></div>
+            </div>
+
+            <!-- Score Breakdown -->
+            <div class="breakdown">
+              <h4>Score Breakdown</h4>
+              <div class="breakdown-list" id="breakdown-list"></div>
+            </div>
+
+            <!-- Keywords -->
+            <div class="keywords-section" id="keywords-section" style="display:none">
+              <h4>Keyword Analysis</h4>
+              <div id="keyword-matched" class="keyword-group"></div>
+              <div id="keyword-missing" class="keyword-group"></div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations-section">
+              <h4>Recommendations <span id="rec-count" class="rec-badge"></span></h4>
+              <div id="recommendations-list"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Three steps to a stronger resume</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <div class="step-icon">📋</div>
+          <h3>Paste Your Resume</h3>
+          <p>Copy the text from your Word doc or PDF and paste it into the editor. Plain text gives the most accurate analysis.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <div class="step-icon">🔍</div>
+          <h3>Get Instant Analysis</h3>
+          <p>Our analyzer checks for ATS compatibility, action verbs, quantified achievements, missing sections, and keyword density.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <div class="step-icon">🚀</div>
+          <h3>Apply Improvements</h3>
+          <p>Follow the prioritized recommendations to strengthen your resume and increase your chances of passing ATS filters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pro Tips -->
+  <section class="tips-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Pro Resume Tips</h2>
+        <p>Expert advice to maximize your interview rate</p>
+      </div>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">🎯</div>
+          <h3>Tailor for Each Job</h3>
+          <p>Mirror the exact language from the job description. ATS systems score resumes based on keyword frequency and relevance.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📊</div>
+          <h3>Quantify Everything</h3>
+          <p>Replace "improved performance" with "improved performance by 35%". Numbers make accomplishments concrete and memorable.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">⚡</div>
+          <h3>Lead with Action Verbs</h3>
+          <p>Start every bullet with a powerful verb: Led, Developed, Architected, Delivered, Reduced, Increased, Launched.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">🧹</div>
+          <h3>Keep It ATS-Clean</h3>
+          <p>Avoid tables, columns, graphics, and special characters. Use standard section headings that ATS parsers can recognize.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    padding: 5rem 0 3rem;
+    text-align: center;
+  }
+
+  .hero-badges {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge {
+    padding: 0.3rem 0.9rem;
+    background: rgba(0, 212, 170, 0.1);
+    border: 1px solid rgba(0, 212, 170, 0.25);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--accent-primary);
+    font-weight: 500;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  /* Tool Section */
+  .tool-section {
+    padding: 2rem 0 5rem;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Input Panel */
+  .input-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+  }
+
+  .panel-header {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tab-bar {
+    display: flex;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+    background: rgba(0, 212, 170, 0.05);
+  }
+
+  .tab:hover:not(.active) {
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+  }
+
+  .optional {
+    font-size: 0.75rem;
+    opacity: 0.6;
+  }
+
+  .pane {
+    display: none;
+  }
+
+  .pane.active {
+    display: block;
+  }
+
+  .resume-textarea {
+    width: 100%;
+    min-height: 380px;
+    padding: 1.25rem;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    resize: vertical;
+    outline: none;
+  }
+
+  .resume-textarea::placeholder {
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+  }
+
+  .input-hint {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.75rem;
+    font-size: 1rem;
+  }
+
+  /* Results Panel */
+  .results-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    min-height: 500px;
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .feature-list {
+    list-style: none;
+    text-align: left;
+    display: inline-block;
+  }
+
+  .feature-list li {
+    padding: 0.35rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  /* Results Content */
+  .results-content {
+    padding: 1.75rem;
+  }
+
+  /* Score Circle */
+  .score-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .score-circle-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .score-svg .score-bg {
+    stroke: var(--bg-tertiary);
+  }
+
+  .score-svg .score-fg {
+    stroke: var(--accent-primary);
+    transition: stroke-dashoffset 1s ease, stroke 0.3s ease;
+  }
+
+  .score-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .score-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .score-max {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .score-text {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .score-grade {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* Breakdown */
+  .breakdown {
+    margin-bottom: 1.5rem;
+  }
+
+  .breakdown h4,
+  .keywords-section h4,
+  .recommendations-section h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .breakdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .breakdown-label {
+    width: 120px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .breakdown-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .breakdown-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s ease;
+  }
+
+  .breakdown-score {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Keywords */
+  .keywords-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .keyword-group {
+    margin-bottom: 0.75rem;
+  }
+
+  .keyword-group-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .keyword-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .kw-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .kw-match {
+    background: rgba(0, 212, 170, 0.12);
+    color: var(--accent-primary);
+    border: 1px solid rgba(0, 212, 170, 0.25);
+  }
+
+  .kw-miss {
+    background: rgba(255, 107, 157, 0.1);
+    color: var(--accent-secondary);
+    border: 1px solid rgba(255, 107, 157, 0.25);
+  }
+
+  /* Recommendations */
+  .rec-badge {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 99px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .rec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .rec-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .rec-priority {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    height: fit-content;
+    margin-top: 0.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .priority-high { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+  .priority-medium { background: rgba(255, 184, 0, 0.15); color: var(--accent-warning); }
+  .priority-low { background: rgba(0, 212, 170, 0.12); color: var(--accent-primary); }
+
+  /* How It Works */
+  .how-section {
+    padding: 5rem 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-header h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-header p {
+    color: var(--text-muted);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .step-card {
+    padding: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    position: relative;
+  }
+
+  .step-num {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--border-color-hover);
+    line-height: 1;
+  }
+
+  .step-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .step-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  /* Tips Section */
+  .tips-section {
+    padding: 5rem 0;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .tip-card {
+    padding: 1.75rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    transition: all var(--transition-base);
+  }
+
+  .tip-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .tip-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .tip-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .tip-card p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .tips-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .steps-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tips-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  function switchTab(tab: string) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+    (document.getElementById(`tab-${tab}`) as HTMLElement).classList.add('active');
+    (document.getElementById(`pane-${tab}`) as HTMLElement).classList.add('active');
+  }
+
+  function clearAll() {
+    (document.getElementById('resume-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('job-input') as HTMLTextAreaElement).value = '';
+    (document.getElementById('empty-state') as HTMLElement).style.display = 'block';
+    (document.getElementById('results-content') as HTMLElement).style.display = 'none';
+  }
+
+  function analyzeResume() {
+    const resumeText = (document.getElementById('resume-input') as HTMLTextAreaElement).value.trim();
+    const jobDesc = (document.getElementById('job-input') as HTMLTextAreaElement).value.trim();
+
+    if (!resumeText) {
+      alert('Please paste your resume first.');
+      return;
+    }
+
+    const text = resumeText.toLowerCase();
+
+    // Contact Info (0-20)
+    let contactScore = 0;
+    const hasEmail = /[\w.-]+@[\w.-]+\.\w+/.test(resumeText);
+    const hasPhone = /(\+?1?\s?)?(\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4})/.test(resumeText);
+    const hasLinkedIn = /linkedin/i.test(resumeText);
+    const hasLocation = /\b[A-Z][a-z]+(,\s*[A-Z]{2})\b/.test(resumeText);
+    if (hasEmail) contactScore += 8;
+    if (hasPhone) contactScore += 7;
+    if (hasLinkedIn) contactScore += 3;
+    if (hasLocation) contactScore += 2;
+
+    // Sections (0-20)
+    const sectionKeywords: Record<string, string[]> = {
+      experience: ['experience', 'work history', 'employment', 'professional experience'],
+      education: ['education', 'academic', 'degree', 'university', 'college'],
+      skills: ['skills', 'technical skills', 'competencies', 'technologies'],
+      summary: ['summary', 'objective', 'profile', 'about'],
+    };
+    let sectionScore = 0;
+    const foundSections: string[] = [];
+    for (const [section, keywords] of Object.entries(sectionKeywords)) {
+      if (keywords.some(kw => text.includes(kw))) {
+        sectionScore += 5;
+        foundSections.push(section);
+      }
+    }
+    const missingSections = Object.keys(sectionKeywords).filter(s => !foundSections.includes(s));
+
+    // Action Verbs (0-20)
+    const actionVerbs = ['led', 'managed', 'developed', 'created', 'implemented', 'designed', 'built', 'improved', 'increased', 'reduced', 'launched', 'delivered', 'collaborated', 'optimized', 'analyzed', 'coordinated', 'established', 'generated', 'achieved', 'drove', 'spearheaded', 'transformed', 'accelerated', 'executed', 'streamlined'];
+    const foundVerbs = actionVerbs.filter(v => text.includes(v));
+    const actionVerbScore = Math.min(20, Math.round((foundVerbs.length / 8) * 20));
+
+    // Quantified Achievements (0-20)
+    const percentMatches = (resumeText.match(/\d+%/g) || []).length;
+    const dollarMatches = (resumeText.match(/\$[\d,]+/g) || []).length;
+    const numberMatches = (resumeText.match(/\b\d+\+?\s*(users?|customers?|clients?|projects?|team|members?|employees?)/gi) || []).length;
+    const totalQuantified = percentMatches + dollarMatches + numberMatches;
+    const achievementScore = Math.min(20, totalQuantified * 4);
+
+    // Keywords from job description (0-20)
+    let keywordScore = 10;
+    let matchedKeywords: string[] = [];
+    let missingKeywords: string[] = [];
+    const stopWords = new Set(['with', 'that', 'this', 'from', 'they', 'have', 'will', 'your', 'our', 'team', 'work', 'role', 'about', 'their', 'more', 'some', 'must', 'also', 'each', 'been', 'were', 'when', 'into', 'than', 'then', 'them', 'what', 'which', 'other', 'such', 'both', 'well', 'able', 'need', 'help']);
+    if (jobDesc.length > 50) {
+      const jobWords = jobDesc.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
+      const freq: Record<string, number> = {};
+      jobWords.forEach(w => { if (!stopWords.has(w)) freq[w] = (freq[w] || 0) + 1; });
+      const topKeywords = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 20).map(e => e[0]);
+      matchedKeywords = topKeywords.filter(kw => text.includes(kw));
+      missingKeywords = topKeywords.filter(kw => !text.includes(kw)).slice(0, 8);
+      keywordScore = Math.min(20, Math.round((matchedKeywords.length / Math.max(topKeywords.length, 1)) * 20));
+    }
+
+    const totalScore = contactScore + sectionScore + actionVerbScore + achievementScore + keywordScore;
+
+    // Recommendations
+    const recs: { priority: string; text: string }[] = [];
+    if (!hasEmail) recs.push({ priority: 'high', text: 'Add your email address to the contact section.' });
+    if (!hasPhone) recs.push({ priority: 'high', text: 'Add your phone number to the contact section.' });
+    if (!hasLinkedIn) recs.push({ priority: 'medium', text: 'Include your LinkedIn profile URL (e.g., linkedin.com/in/yourname).' });
+    missingSections.forEach(s => {
+      recs.push({ priority: 'high', text: `Add a "${s.charAt(0).toUpperCase() + s.slice(1)}" section — it\'s one of the most important for ATS parsing.` });
+    });
+    if (actionVerbScore < 12) recs.push({ priority: 'high', text: `Use more strong action verbs. Found ${foundVerbs.length} — aim for 8+. Examples: Led, Developed, Implemented, Launched, Achieved.` });
+    if (achievementScore < 8) recs.push({ priority: 'high', text: 'Quantify your achievements with numbers, percentages, or dollar amounts. E.g., "Increased sales by 30%" or "Reduced costs by $50K".' });
+    if (percentMatches === 0) recs.push({ priority: 'medium', text: 'Add percentage metrics to showcase measurable impact (e.g., "Reduced load time by 40%").' });
+    if (jobDesc.length > 50 && keywordScore < 12) recs.push({ priority: 'high', text: `Your resume is missing important keywords from the job description. Integrate these naturally: ${missingKeywords.slice(0, 4).join(', ')}.` });
+    const lines = resumeText.split('\n').filter(l => l.trim());
+    if (lines.length < 18) recs.push({ priority: 'medium', text: 'Your resume looks thin. Aim to fill at least one full page with detailed experience bullet points.' });
+    if (lines.length > 80) recs.push({ priority: 'low', text: 'Your resume may be too long. Most recruiters prefer 1-2 pages. Consider condensing older experience.' });
+    if (!hasLocation) recs.push({ priority: 'low', text: 'Add your location (City, State) to help with location-based ATS filtering.' });
+    if (recs.length === 0) recs.push({ priority: 'low', text: 'Great job! Your resume looks strong. Keep tailoring it for each job you apply to.' });
+
+    recs.sort((a, b) => {
+      const p: Record<string, number> = { high: 0, medium: 1, low: 2 };
+      return p[a.priority] - p[b.priority];
+    });
+
+    // ---- Render ----
+    (document.getElementById('empty-state') as HTMLElement).style.display = 'none';
+    (document.getElementById('results-content') as HTMLElement).style.display = 'block';
+
+    // Score
+    const scoreEl = document.getElementById('score-number') as HTMLElement;
+    const arc = document.getElementById('score-arc') as SVGCircleElement;
+    const circumference = 327;
+    scoreEl.textContent = String(totalScore);
+    const offset = circumference - (totalScore / 100) * circumference;
+    arc.style.strokeDashoffset = String(offset);
+
+    const gradeEl = document.getElementById('score-grade') as HTMLElement;
+    if (totalScore >= 80) {
+      arc.style.stroke = '#00d4aa';
+      gradeEl.innerHTML = '<span style="color:#00d4aa">Excellent</span><br><small style="color:var(--text-muted);font-size:0.8rem">ATS-Ready Resume</small>';
+    } else if (totalScore >= 60) {
+      arc.style.stroke = '#ffb800';
+      gradeEl.innerHTML = '<span style="color:#ffb800">Good</span><br><small style="color:var(--text-muted);font-size:0.8rem">A few improvements needed</small>';
+    } else if (totalScore >= 40) {
+      arc.style.stroke = '#ff8c42';
+      gradeEl.innerHTML = '<span style="color:#ff8c42">Fair</span><br><small style="color:var(--text-muted);font-size:0.8rem">Significant improvements needed</small>';
+    } else {
+      arc.style.stroke = '#ff6b6b';
+      gradeEl.innerHTML = '<span style="color:#ff6b6b">Needs Work</span><br><small style="color:var(--text-muted);font-size:0.8rem">Major revisions recommended</small>';
+    }
+
+    // Breakdown
+    const breakdownItems = [
+      { label: 'Contact Info', score: contactScore, max: 20, color: '#6366f1' },
+      { label: 'Sections', score: sectionScore, max: 20, color: '#00d4aa' },
+      { label: 'Action Verbs', score: actionVerbScore, max: 20, color: '#ff6b9d' },
+      { label: 'Achievements', score: achievementScore, max: 20, color: '#ffb800' },
+      { label: 'Keywords', score: keywordScore, max: 20, color: '#00d4aa' },
+    ];
+    const breakdownList = document.getElementById('breakdown-list') as HTMLElement;
+    breakdownList.innerHTML = breakdownItems.map(item => `
+      <div class="breakdown-item">
+        <span class="breakdown-label">${item.label}</span>
+        <div class="breakdown-bar">
+          <div class="breakdown-fill" style="width:${(item.score / item.max) * 100}%;background:${item.color}"></div>
+        </div>
+        <span class="breakdown-score">${item.score}/${item.max}</span>
+      </div>
+    `).join('');
+
+    // Keywords
+    const kwSection = document.getElementById('keywords-section') as HTMLElement;
+    if (jobDesc.length > 50) {
+      kwSection.style.display = 'block';
+      const matchedEl = document.getElementById('keyword-matched') as HTMLElement;
+      const missingEl = document.getElementById('keyword-missing') as HTMLElement;
+      matchedEl.innerHTML = matchedKeywords.length > 0 ? `
+        <div class="keyword-group-label">✅ Matched keywords (${matchedKeywords.length})</div>
+        <div class="keyword-tags">${matchedKeywords.map(k => `<span class="kw-tag kw-match">${k}</span>`).join('')}</div>
+      ` : '';
+      missingEl.innerHTML = missingKeywords.length > 0 ? `
+        <div class="keyword-group-label" style="margin-top:0.5rem">❌ Missing keywords (${missingKeywords.length})</div>
+        <div class="keyword-tags">${missingKeywords.map(k => `<span class="kw-tag kw-miss">${k}</span>`).join('')}</div>
+      ` : '';
+    } else {
+      kwSection.style.display = 'none';
+    }
+
+    // Recommendations
+    const recCount = document.getElementById('rec-count') as HTMLElement;
+    recCount.textContent = String(recs.length);
+    const recList = document.getElementById('recommendations-list') as HTMLElement;
+    recList.innerHTML = `<div class="rec-list">${recs.map(r => `
+      <div class="rec-item">
+        <span class="rec-priority priority-${r.priority}">${r.priority}</span>
+        <span>${r.text}</span>
+      </div>
+    `).join('')}</div>`;
+  }
+
+  // Expose globally
+  (window as any).switchTab = switchTab;
+  (window as any).clearAll = clearAll;
+  (window as any).runAnalysis = analyzeResume;
+</script>
